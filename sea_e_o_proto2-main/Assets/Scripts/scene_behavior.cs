@@ -74,7 +74,7 @@ public class scene_behavior : MonoBehaviour
         // obective screen inactive
         objective_screen.SetActive(false);
         // set scene index to -1
-        scene_index = 14;
+        scene_index = -1;
         scene_flag = true;
     }
 
@@ -658,11 +658,23 @@ public class scene_behavior : MonoBehaviour
                         // update player sprite
                         player.GetComponent<SpriteRenderer>().sprite = player.GetComponent<player_behavior>().sprite_diving_front;
                         scene_index = 19;
+                        scene_flag = true;
                     }
                 }
 
                 break;
             case 19: // moon pool
+                if(scene_flag == true){
+                    string [] lines = new string[4] {"You are now in the Ocean Corridor. There are two Circuit Panels that you can fix.", "One is in this sector, on the bottom right. It has free access but is more complex to fix.", "The other is in the next sector, on the top left. It is easier to fix but requires a key, which is somewhere in the sector for you to find.", "Both will fix the lights, it is up to you to choose which one to fix"};
+                    string [] speakers = new string[4] {"INTRA", "INTRA", "INTRA", "INTRA"};
+                    string choices = "(Z) - Continue";
+                    dialogue_box.GetComponent<Dialogue>().choices = choices;
+                    dialogue_box.GetComponent<Dialogue>().speakers = speakers;
+                    dialogue_box.GetComponent<Dialogue>().sentences = lines;
+                    dialogue_box.SetActive(true);
+                    dialogue_box.GetComponent<Dialogue>().startDialogue();
+                    scene_flag = false;
+                }
                 // player is_diving is true
                 player.GetComponent<player_behavior>().is_diving = true;
                 // obj = go to circuit panel

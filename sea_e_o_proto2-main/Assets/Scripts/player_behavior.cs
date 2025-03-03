@@ -13,10 +13,12 @@ public class player_behavior : MonoBehaviour
     public Sprite sprite_normal_front, sprite_normal_back, sprite_normal_left, sprite_normal_right;
     public Sprite sprite_diving_front, sprite_diving_back, sprite_diving_left, sprite_diving_right;
     public bool is_diving;
+    private AudioSource audioPlayer;
     // ---------------------------------------------
     // Start is called before the first frame update
     void Start()
     {
+        audioPlayer = GetComponent<AudioSource>();
         is_diving = false;
         move_point.parent = null;
     }
@@ -35,9 +37,12 @@ public class player_behavior : MonoBehaviour
     }
 
     void player_move(){
-        
         // if press the arrow keys, move
         if(Math.Abs(Input.GetAxisRaw("Horizontal")) == 1f){
+            // play audio
+            if(!audioPlayer.isPlaying){
+                audioPlayer.Play();
+            }
             if(!Physics2D.OverlapCircle(move_point.position + new Vector3(Input.GetAxisRaw("Horizontal") * 0.35f, 0f, 0f), 0.15f, stop_movement) && !Physics2D.OverlapCircle(move_point.position + new Vector3(Input.GetAxisRaw("Horizontal") * 0.5f, 0f, 0f), 0.15f, BOX) )
             {
                 move_point.position += new Vector3(Input.GetAxisRaw("Horizontal") * 0.35f, 0f, 0f);
@@ -56,6 +61,10 @@ public class player_behavior : MonoBehaviour
                 }
             }
         } else if(Math.Abs(Input.GetAxisRaw("Vertical")) == 1f){
+            // play audio
+            if(!audioPlayer.isPlaying){
+                audioPlayer.Play();
+            }
             if(!Physics2D.OverlapCircle(move_point.position + new Vector3(0f, Input.GetAxisRaw("Vertical") * 0.35f, 0f), 0.15f, stop_movement) && !Physics2D.OverlapCircle(move_point.position + new Vector3(0f, Input.GetAxisRaw("Vertical") * 0.5f, 0f), 0.15f, BOX)){
                 move_point.position += new Vector3(0f, Input.GetAxisRaw("Vertical") * 0.35f, 0f);
                 if(is_diving){

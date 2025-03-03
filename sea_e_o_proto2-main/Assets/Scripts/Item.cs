@@ -9,9 +9,11 @@ public class Item : MonoBehaviour
     [SerializeField] private Sprite itemSprite;
 
     private InventoryManager inventoryManager;
+    private AudioSource audioPlayer;
     // Start is called before the first frame update
     void Start()
     {
+        audioPlayer = GetComponent<AudioSource>();
         inventoryManager = GameObject.Find("InventoryCanvas").GetComponent<InventoryManager>();
     }
 
@@ -21,6 +23,7 @@ public class Item : MonoBehaviour
         // if player is near item, add item to inventory
         if(Vector3.Distance(GameObject.Find("Player").transform.position, transform.position) <= 0.5f){
             if(Input.GetKeyDown(KeyCode.Z)){
+                audioPlayer.Play();
                 inventoryManager.AddItem(itemName, quantity, itemSprite);
                 Destroy(gameObject);
             }
