@@ -37,7 +37,8 @@ public class scene_behavior : MonoBehaviour
     public GameObject light_object, light2, startScreen, deadScreen, objective_screen;
     public TextMeshProUGUI objective_text;
     public GameObject boxTutTrigger, panel_key;
-    private bool box_tut_done, ocean_easy_path;
+    private bool box_tut_done, ocean_easy_path, puzzle1_done;
+    public GameObject puzzle1;
 
 
     // Start is called before the first frame update
@@ -60,6 +61,7 @@ public class scene_behavior : MonoBehaviour
         box_tut_done = false;
         ocean_easy_path = false;
         panel_key_collected = false;
+        puzzle1_done = false;
 
         // ai room door inactive
         AIroomDoor.SetActive(false);
@@ -212,16 +214,17 @@ public class scene_behavior : MonoBehaviour
                 }
                 // if player enters containment room do the monster roar and go to scene 7
                 if(Physics2D.OverlapCircle(player.transform.position, 1.0f, LayerMask.GetMask("ContainmentRoomFlag"))){
-                    // play monster roar
-                    // play some dialoge
-                    string [] lines = new string[2] {"[You hear a loud roar from the containment room]", "[puzzle for getting into room here]"};
-                    string [] speakers = new string[2] {"", ""};
-                    string choices = "(Z) - Continue";
-                    dialogue_box.GetComponent<Dialogue>().choices = choices;
-                    dialogue_box.GetComponent<Dialogue>().speakers = speakers;
-                    dialogue_box.GetComponent<Dialogue>().sentences = lines;
-                    dialogue_box.SetActive(true);
-                    dialogue_box.GetComponent<Dialogue>().startDialogue();
+                    // // play monster roar
+                    // // play some dialoge
+                    // string [] lines = new string[2] {"[You hear a loud roar from the containment room]", "[puzzle for getting into room here]"};
+                    // string [] speakers = new string[2] {"", ""};
+                    // string choices = "(Z) - Continue";
+                    // dialogue_box.GetComponent<Dialogue>().choices = choices;
+                    // dialogue_box.GetComponent<Dialogue>().speakers = speakers;
+                    // dialogue_box.GetComponent<Dialogue>().sentences = lines;
+                    // dialogue_box.SetActive(true);
+                    // dialogue_box.GetComponent<Dialogue>().startDialogue();
+                    scene_flag = true;
                     scene_index = 7;
                 } else if(Physics2D.OverlapCircle(player.transform.position, 1.0f, LayerMask.GetMask("MainLabFlag"))){
                     // if player enters main lab, go to scene 13
@@ -229,6 +232,35 @@ public class scene_behavior : MonoBehaviour
                 }               
                 break;
             case 7: // containment room
+                if(scene_flag == true && dialogue_box.GetComponent<Dialogue>().active == false && Physics2D.OverlapCircle(player.transform.position, 1.0f, LayerMask.GetMask("ContainmentRoomFlag")) && puzzle1_done == false){
+                    // play monster roar
+                    chasing_monster.SetActive(true);
+                    // play some dialoge
+                    string [] lines = new string[3] {"[You hear a loud roar from the containment room]", "You can see a monster inside the containment room.", "The door to the Containment Room is locked. You will need to unlock it first."};
+                    string [] speakers = new string[3] {"", "", "INTRA"};
+                    string choices = "(Z) - Continue";
+                    dialogue_box.GetComponent<Dialogue>().choices = choices;
+                    dialogue_box.GetComponent<Dialogue>().speakers = speakers;
+                    dialogue_box.GetComponent<Dialogue>().sentences = lines;
+                    dialogue_box.SetActive(true);
+                    dialogue_box.GetComponent<Dialogue>().startDialogue();
+                    scene_flag = false;
+                    // stop player movement
+                    player.GetComponent<player_behavior>().enabled = false;
+                }
+                // trigger puzzle 1
+                if(Physics2D.OverlapCircle(player.transform.position, 1.0f, LayerMask.GetMask("ContainmentRoomFlag")) && dialogue_box.GetComponent<Dialogue>().active == false && puzzle1_done == false && scene_flag == false){
+                    puzzle1.SetActive(true);
+                    scene_flag = true;
+                    player.GetComponent<player_behavior>().enabled = false;   
+                }
+                if(puzzle1_done == true){
+                    // enable player movement
+                    player.GetComponent<player_behavior>().enabled = true;
+                    // turn off puzzle 1
+                    puzzle1.SetActive(false);
+                }
+                puzzle1_done = puzzle1.GetComponent<puzzle>().completed;
                 // monitoring screen = scene 8
                 if(Vector3.Distance(player.transform.position, computer.transform.position) <= 1.0f && dialogue_box.GetComponent<Dialogue>().active == false){
                     // if input key "Z" is pressed, show dialogue box
@@ -316,6 +348,7 @@ public class scene_behavior : MonoBehaviour
                     c_room_done = true;
                 } else {
                     // back to scene 7:
+                    scene_flag = true;
                     scene_index = 7;
                     return;
                 }
@@ -331,6 +364,7 @@ public class scene_behavior : MonoBehaviour
                     objective_screen.SetActive(true);
                     objective_text.text = "-> Explore Containment Room";
                     // go to containment room
+                    scene_flag = true;
                     scene_index = 7;
                 }
                 if(main_lab_done == true && c_room_done == true){
