@@ -238,7 +238,7 @@ public class scene_behavior : MonoBehaviour
             case 7: // containment room
                 if(scene_flag == true && dialogue_box.GetComponent<Dialogue>().active == false && Physics2D.OverlapCircle(player.transform.position, 1.0f, LayerMask.GetMask("ContainmentRoomFlag")) && puzzle1_done == false){
                     // play monster roar
-                    chasing_monster.SetActive(true);
+                    // chasing_monster.SetActive(true);
                     // play some dialoge
                     string [] lines = new string[3] {"[You hear a loud roar from the containment room]", "You can see a monster inside the containment room.", "The door to the Containment Room is locked. You will need to unlock it first."};
                     string [] speakers = new string[3] {"", "", "INTRA"};
