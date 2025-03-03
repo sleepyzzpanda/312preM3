@@ -37,8 +37,8 @@ public class scene_behavior : MonoBehaviour
     public GameObject light_object, light2, startScreen, deadScreen, objective_screen;
     public TextMeshProUGUI objective_text;
     public GameObject boxTutTrigger, panel_key;
-    private bool box_tut_done, ocean_easy_path, puzzle1_done;
-    public GameObject puzzle1;
+    private bool box_tut_done, ocean_easy_path, puzzle1_done, puzzle4_done, puzzle7_done, puzzle4_trig, puzzle7_trig;
+    public GameObject puzzle1, puzzle4, puzzle7;
 
 
     // Start is called before the first frame update
@@ -62,6 +62,10 @@ public class scene_behavior : MonoBehaviour
         ocean_easy_path = false;
         panel_key_collected = false;
         puzzle1_done = false;
+        puzzle4_done = false;
+        puzzle7_done = false;
+        puzzle4_trig = false;
+        puzzle7_trig = false;
 
         // ai room door inactive
         AIroomDoor.SetActive(false);
@@ -76,7 +80,7 @@ public class scene_behavior : MonoBehaviour
         // obective screen inactive
         objective_screen.SetActive(false);
         // set scene index to -1
-        scene_index = -1;
+        scene_index = 14;
         scene_flag = true;
     }
 
@@ -727,17 +731,19 @@ public class scene_behavior : MonoBehaviour
                         dialogue_box.GetComponent<Dialogue>().sentences = lines;
                         dialogue_box.SetActive(true);
                         dialogue_box.GetComponent<Dialogue>().startDialogue();
-                        // go to scene 20 - cutscene
-                        scene_flag = true;
-                        scene_index = 20;
-                        // turn light object off
-                        light_object.SetActive(false);
+                        // // go to scene 20 - cutscene
+                        // scene_flag = true;
+                        // scene_index = 20;
+                        // // turn light object off
+                        // light_object.SetActive(false);
                         ocean_easy_path = false;
+                        puzzle7_trig = true;
                     }
                 }
                 // - easy path
                 if(Vector3.Distance(player.transform.position, circuit_panel_2.transform.position) <= 1.0f && dialogue_box.GetComponent<Dialogue>().active == false){
                     // if input key "Z" is pressed collect suit
+                    
                     if(Input.GetKeyDown(KeyCode.Z) && panel_key_collected == true){
                         // circuit dialog
                         string[] lines = circuit_panel_2.GetComponent<dialogue_item>().sentences;
@@ -748,11 +754,15 @@ public class scene_behavior : MonoBehaviour
                         dialogue_box.GetComponent<Dialogue>().sentences = lines;
                         dialogue_box.SetActive(true);
                         dialogue_box.GetComponent<Dialogue>().startDialogue();
-                        // go to scene 20 - cutscene
-                        scene_flag = true;
-                        scene_index = 20;
-                        // turn light object off
-                        light_object.SetActive(false);
+
+                        // trigger puzzle 4
+                        puzzle4_trig = true;
+
+                        // // go to scene 20 - cutscene
+                        // scene_flag = true;
+                        // scene_index = 20;
+                        // // turn light object off
+                        // light_object.SetActive(false);
                         ocean_easy_path = true;
                     }
                 }
@@ -774,6 +784,27 @@ public class scene_behavior : MonoBehaviour
                         panel_key_collected = true;
                         panel_key.SetActive(false);
                     }
+                }
+                if(puzzle4_trig == true && puzzle4_done == false && dialogue_box.GetComponent<Dialogue>().active == false){
+                    // trigger puzzle 4
+                    puzzle4.SetActive(true);
+                    player.GetComponent<player_behavior>().enabled = false;
+                } else if( puzzle7_trig == true && puzzle7_done == false && dialogue_box.GetComponent<Dialogue>().active == false){
+                    // trigger puzzle 7
+                    puzzle7.SetActive(true);
+                    player.GetComponent<player_behavior>().enabled = false;
+                }
+                puzzle4_done = puzzle4.GetComponent<puzzle>().completed;
+                puzzle7_done = puzzle7.GetComponent<puzzle>().completed;
+                if(puzzle4_done == true || puzzle7_done == true){
+                    player.GetComponent<player_behavior>().enabled = true;
+                    puzzle4.SetActive(false);
+                    puzzle7.SetActive(false);
+                    // go to scene 20 - cutscene
+                    scene_flag = true;
+                    scene_index = 20;
+                    // turn light object off
+                    light_object.SetActive(false);
                 }
                 break;
             case 20: // cutscene

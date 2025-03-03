@@ -13,7 +13,7 @@ public class monster_chase : MonoBehaviour
     {
         direction = 0;
         catch_player = false;
-        speed = 3.0f;
+        speed = 3.5f;
         
     }
 
