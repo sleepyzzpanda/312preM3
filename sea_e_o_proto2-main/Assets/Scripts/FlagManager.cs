@@ -5,12 +5,14 @@ using UnityEngine;
 public class FlagManager : MonoBehaviour
 {
     private int scene_index;
-    public int emp_friendship;
+    private int emp_friendship;
+    private int morality; // for keeping track of player's choices
     // Start is called before the first frame update
     void Start()
     {
         scene_index = 0; // inits to 0 
-        emp_friendship = 0; // inits to 0   
+        emp_friendship = 0; // inits to 0  
+        morality = 0; // inits to 0 
     }
 
     // Update is called once per frame
