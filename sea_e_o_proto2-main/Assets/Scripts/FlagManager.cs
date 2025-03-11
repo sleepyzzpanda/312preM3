@@ -5,10 +5,12 @@ using UnityEngine;
 public class FlagManager : MonoBehaviour
 {
     private int scene_index;
+    public int emp_friendship;
     // Start is called before the first frame update
     void Start()
     {
-        scene_index = 0; // inits to 0    
+        scene_index = 0; // inits to 0 
+        emp_friendship = 0; // inits to 0   
     }
 
     // Update is called once per frame
@@ -97,6 +99,79 @@ public class FlagManager : MonoBehaviour
                 // INTRA forbids player from going outside again unless permitted “for safety”
                 // mc doesn’t care and wants to go back to investigate scene
                 // need EMP to temporarily disable AI screens/cameras outside
+                break;
+            case 14:
+                // EMP disables and leaves, mc goes outside
+                // discover sealed off vent (“it’s sealed off”)
+                // MC wonders where it goes in station
+                break;
+            case 15:
+                // MC goes back and recruits EMP for help (EMP waiting in repair room or smth?)
+                // needs a map of the vents
+                // EMP is curious now too, but cautious
+                // EMP disables again (but for longer), go to vent on first floor, enter
+                // warns INTRA will be suspicious
+                break;
+            case 16:
+                // secret lab floor
+                // lots of stuff happens here
+            case 17:
+                // climax
+                // containment room
+                // cutscene
+                break;
+            case 18:
+                // puzzle
+                break;
+            case 19:
+                // cutscene
+                break;
+            case 20:
+                // smash the screen, go against INTRA -> scene 24
+                // go along with INTRA and company in destroying evidence, 
+                // turning blind eye, reach corporate success -> scene 21
+                break;
+            case 21:
+                // INTRA releases a monster, kills EMP
+                // player kills monster
+                // kill all the monsters in tubes
+                break;
+            case 22:
+                // head back up to first floor
+                // help INTRA set station to self destruct
+                // leave station via returned drone?
+                break;
+            case 23:
+                // cutscene
+                // renegade ending
+                // go to game over screen
+                break;
+            case 24:
+                // not gonna listen to intra, intra starts shutting doors, lights, trying to kill mc and emp, monsters from containment let out
+                // EMP unlocks doors
+                // MC needs to hold off monsters
+                // MC and emp escapes from more monsters
+                // head back up to 1st floor
+                break;
+            case 25:
+                // options to kill monsters or just run - can use claw once as a weapon
+                // Arlo gets thru security doors while players distract monsters
+                break;
+            case 26:
+                // finally reach first floor
+                // if EMP survived, can lock off area for mc so they can make a cure
+                // make cure
+                break;
+            case 27:
+                // go to AI room
+                // destroy INTRA
+                break;
+            case 28:
+                // spread cure
+                break;
+            case 29:
+                // ending - based on choices
+            
         }
     }
 }
